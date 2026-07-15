@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Spelling Bee</title>
+  <meta name="description" content="Practice spelling English words: kindergarten through grade 4. Hear the word, then type it!">
+  <meta name="theme-color" content="#f59e0b">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Spelling Bee">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand">🐝 Spelling&nbsp;Bee</div>
+      <div class="score">
+        <span class="chip ok" title="Correct">✔ <b id="right">0</b></span>
+        <span class="chip bad" title="Wrong">✘ <b id="wrong">0</b></span>
+        <span class="chip streak" title="Streak">🔥 <b id="streak">0</b></span>
+      </div>
+    </div>
+    <nav class="grades" id="grades">
+      <button class="grade active" data-grade="k" aria-label="Kindergarten">K</button>
+      <button class="grade" data-grade="g1" aria-label="Grade 1">1</button>
+      <button class="grade" data-grade="g2" aria-label="Grade 2">2</button>
+      <button class="grade" data-grade="g3" aria-label="Grade 3">3</button>
+      <button class="grade" data-grade="g4" aria-label="Grade 4">4</button>
+      <button class="grade" data-grade="test" aria-label="Test words">🧪</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="card" class="card">
+      <div class="hearing">
+        <button id="speak" class="speak" aria-label="Hear the word">🔊</button>
+        <button id="sentence" class="peek" aria-label="Hear a sentence" hidden>💬</button>
+        <button id="peek" class="peek" aria-label="Peek at the word">👁</button>
+      </div>
+      <div id="slots" class="slots" aria-label="Your spelling"></div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+    </div>
+  </main>
+
+  <div class="keyboard" id="keyboard">
+    <div class="krow">
+      <button class="key" data-k="q">q</button>
+      <button class="key" data-k="w">w</button>
+      <button class="key" data-k="e">e</button>
+      <button class="key" data-k="r">r</button>
+      <button class="key" data-k="t">t</button>
+      <button class="key" data-k="y">y</button>
+      <button class="key" data-k="u">u</button>
+      <button class="key" data-k="i">i</button>
+      <button class="key" data-k="o">o</button>
+      <button class="key" data-k="p">p</button>
+    </div>
+    <div class="krow">
+      <button class="key" data-k="a">a</button>
+      <button class="key" data-k="s">s</button>
+      <button class="key" data-k="d">d</button>
+      <button class="key" data-k="f">f</button>
+      <button class="key" data-k="g">g</button>
+      <button class="key" data-k="h">h</button>
+      <button class="key" data-k="j">j</button>
+      <button class="key" data-k="k">k</button>
+      <button class="key" data-k="l">l</button>
+    </div>
+    <div class="krow">
+      <button class="key act back" data-k="back" aria-label="Delete">⌫</button>
+      <button class="key" data-k="z">z</button>
+      <button class="key" data-k="x">x</button>
+      <button class="key" data-k="c">c</button>
+      <button class="key" data-k="v">v</button>
+      <button class="key" data-k="b">b</button>
+      <button class="key" data-k="n">n</button>
+      <button class="key" data-k="m">m</button>
+      <button class="key act ok" data-k="ok" aria-label="Check spelling">✔</button>
+    </div>
+  </div>
+
+  <script src="words.js"></script>
+  <script src="sentences.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
