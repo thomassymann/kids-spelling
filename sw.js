@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE = "spelling-bee-v7";
+const CACHE = "spelling-bee-v10";
 const ASSETS = [
   "./index.html",
   "./style.css",
@@ -18,7 +18,12 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches
+      .open(CACHE)
+      // cache: "reload" bypasses the browser's HTTP cache, so a new service
+      // worker version never installs stale copies of the assets.
+      .then((cache) => cache.addAll(ASSETS.map((a) => new Request(a, { cache: "reload" }))))
+      .then(() => self.skipWaiting())
   );
 });
 

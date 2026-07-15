@@ -8,7 +8,6 @@ const els = {
   slots: document.getElementById("slots"),
   feedback: document.getElementById("feedback"),
   speak: document.getElementById("speak"),
-  sentence: document.getElementById("sentence"),
   peek: document.getElementById("peek"),
   right: document.getElementById("right"),
   wrong: document.getElementById("wrong"),
@@ -29,30 +28,11 @@ function rnd(min, max) {
 }
 
 /* ---------- speech ---------- */
-// All grades share pre-generated clips in audio/words/ (<word>.wav +
-// <word>_sentence.mp3); missing files fall back to browser TTS.
-const HAS_AUDIO = { test: true, k: true, g1: true, g2: true, g3: true, g4: true };
-
+// One clip per word in audio/words/<word>.mp3 ("<word>. <sentence>. <word>.");
+// missing files fall back to browser TTS.
 const player = new Audio();
-let queue = [];
-
-function playNext() {
-  if (!queue.length) {
-    els.speak.classList.remove("talking");
-    return;
-  }
-  const item = queue.shift();
-  player.src = item.src;
-  els.speak.classList.add("talking");
-  player.play().catch(() => {
-    queue = [];
-    els.speak.classList.remove("talking");
-    speakFallback(item.fallbackText);
-  });
-}
-
-// Short breather between clips (word ... sentence).
-player.addEventListener("ended", () => setTimeout(playNext, 500));
+player.addEventListener("ended", () => els.speak.classList.remove("talking"));
+player.addEventListener("pause", () => els.speak.classList.remove("talking"));
 
 let voice = null;
 
@@ -82,34 +62,21 @@ function speakFallback(text) {
   u.onend = () => els.speak.classList.remove("talking");
 }
 
-function playMp3s(items) {
+function stopAudio() {
   if ("speechSynthesis" in window) speechSynthesis.cancel();
   player.pause();
-  queue = items;
-  playNext();
 }
 
-function sayWord() {
-  if (HAS_AUDIO[grade]) playMp3s([{ src: `audio/words/${word}.wav`, fallbackText: word }]);
-  else speakFallback(word);
-}
-
-function saySentence() {
-  if (HAS_AUDIO[grade])
-    playMp3s([{ src: `audio/words/${word}_sentence.mp3`, fallbackText: SENTENCES[word] }]);
-  else if (SENTENCES[word]) speakFallback(SENTENCES[word]);
-}
-
-// New word: read the word, pause, then its sentence.
+// Play the announcement ("word. sentence. word.") from the beginning.
 function announceWord() {
-  if (HAS_AUDIO[grade]) {
-    playMp3s([
-      { src: `audio/words/${word}.wav`, fallbackText: word },
-      { src: `audio/words/${word}_sentence.mp3`, fallbackText: SENTENCES[word] },
-    ]);
-  } else {
-    speakFallback(word);
-  }
+  stopAudio();
+  player.src = `audio/words/${word}.mp3`;
+  els.speak.classList.add("talking");
+  player.play().catch(() => {
+    els.speak.classList.remove("talking");
+    const s = SENTENCES[word];
+    speakFallback(s ? `${word}. ${s} ${word}.` : word);
+  });
 }
 
 /* ---------- game ---------- */
@@ -176,6 +143,7 @@ function submit() {
     return;
   }
   if (input === word) {
+    stopAudio(); // correct: cut the announcement short
     locked = true;
     score.right++;
     score.streak++;
@@ -198,13 +166,14 @@ function submit() {
       els.feedback.className = "feedback oops";
       render();
       renderSlots(word, "hint");
+      announceWord(); // wrong: replay from the beginning
       setTimeout(newWord, 2500);
     } else {
       input = "";
       els.feedback.textContent = "Try again! 💪";
       els.feedback.className = "feedback oops";
       render();
-      sayWord();
+      announceWord(); // wrong: replay from the beginning
     }
   }
 }
@@ -220,8 +189,7 @@ function peek() {
   }, 1500);
 }
 
-els.speak.addEventListener("click", sayWord);
-els.sentence.addEventListener("click", saySentence);
+els.speak.addEventListener("click", announceWord);
 els.peek.addEventListener("click", peek);
 
 document.getElementById("keyboard").addEventListener("click", (e) => {
@@ -234,7 +202,6 @@ document.getElementById("grades").addEventListener("click", (e) => {
   if (!btn) return;
   grade = btn.dataset.grade;
   document.querySelectorAll(".grade").forEach((b) => b.classList.toggle("active", b === btn));
-  els.sentence.hidden = !HAS_AUDIO[grade];
   prevWord = "";
   newWord();
 });

@@ -14,17 +14,17 @@
 const WORDS = {
   test: ["cat", "jump", "blue", "fish", "tree"],
   k: [
-    "and","away","big","blue","can","come","down","find","for","funny","go","help",
-    "here","in","is","it","jump","little","look","make","me","my","not","one","play",
-    "red","run","said","see","the","three","to","two","up","we","where","yellow","you",
-    "all","am","are","at","ate","be","black","brown","but","came","did","do","eat",
-    "four","get","good","have","he","into","like","must","new","no","now","on","our",
-    "out","please","pretty","ran","ride","saw","say","she","so","soon","that","there",
+    "and","away","big","blue","can","come","down","find","for","funny","help",
+    "here","jump","little","look","make","not","one","play",
+    "red","run","said","see","the","three","two","where","yellow","you",
+    "all","are","ate","black","brown","but","came","did","eat",
+    "four","get","good","have","into","like","must","new","now","our",
+    "out","please","pretty","ran","ride","saw","say","she","soon","that","there",
     "they","this","too","under","want","was","well","went","what","white","who","will",
     "with","yes"
   ],
   g1: [
-    "at","bat","cat","sat","that","an","can","ran","man","plan","dad","had","sad","bad",
+    "bat","cat","sat","that","can","ran","man","plan","dad","had","sad","bad",
     "bag","rag","tag","brag","cap","map","tap","slap","and","land","sand","band","hand",
     "bed","red","fed","sled","hen","men","pen","when","pet","jet","get","let","bell",
     "tell","yell","smell","best","nest","rest","test","did","hid","lid","kid","big",
